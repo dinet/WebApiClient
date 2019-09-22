@@ -43,13 +43,13 @@ namespace DealersAndVehicles.Services
             //Post Answer
             string response = await _apiService.PostAnswerAsync(datasetId, answer);
             return response;
-
         }
 
         private async Task<DealerAnswerDTO> PrepareDealerDTOs(string datasetId, int dealerId, List<VehicleDTO> vehicles)
         {
             //Retrive dealer details
             DealerDTO dealerDTO = await _apiService.GetDealerByIdAsync(datasetId, dealerId);
+
             //Prepare vehicles list
             List<VehicleAnswerDTO> vehicleAnsDTOs = vehicles.Select(i => new VehicleAnswerDTO()
             {
@@ -58,6 +58,7 @@ namespace DealersAndVehicles.Services
                 model = i.model,
                 year = i.year
             }).ToList();
+
             //Prepare dealers list
             DealerAnswerDTO dealer = new DealerAnswerDTO()
             {
