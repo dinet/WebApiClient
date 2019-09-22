@@ -29,7 +29,7 @@ namespace DealersAndVehicles.Services
             //Grouping vehicles by dealer Id
             var vehiclesGroupedByDealers = vehicles.GroupBy(i => i.dealerId);
 
-            //Retriving Dealers parellely
+            //Retriving Dealers and preparing dealer DTOs for the answer 
             IEnumerable<Task<DealerAnswerDTO>> getDealerTasksQuery = from g in vehiclesGroupedByDealers select PrepareDealerDTOs(datasetId, g.Key, g.ToList());
             Task<DealerAnswerDTO>[] getDealerTasksArray = getDealerTasksQuery.ToArray();
             DealerAnswerDTO[] Dealers = await Task.WhenAll(getDealerTasksArray);
@@ -41,7 +41,7 @@ namespace DealersAndVehicles.Services
             };
 
             //Post Answer
-            var response = await _apiService.PostAnswerAsync(datasetId, answer);
+            string response = await _apiService.PostAnswerAsync(datasetId, answer);
             return response;
 
         }
