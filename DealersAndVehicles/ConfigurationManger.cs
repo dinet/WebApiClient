@@ -3,7 +3,7 @@ using System.IO;
 
 namespace DealersAndVehicles
 {   
-    static class ConfigurationManager
+    public static class ConfigurationManager
     {
         public static IConfiguration AppSetting { get; }
         static ConfigurationManager()
