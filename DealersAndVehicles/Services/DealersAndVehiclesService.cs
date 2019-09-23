@@ -22,17 +22,17 @@ namespace DealersAndVehicles.Services
             List<int> vehicleIds = await _apiService.GetVehiclesListAsync(datasetId);
 
             //Retriving vehicles for each vehicleId
-            IEnumerable<Task<VehicleResponse>> getVehicleTasksQuery = from id in vehicleIds select _apiService.GetVehicleByIdAsync(datasetId, id);
-            Task<VehicleResponse>[] getVehicleTasksArr = getVehicleTasksQuery.ToArray();
-            VehicleResponse[] vehicles = await Task.WhenAll(getVehicleTasksArr);
+            IEnumerable<Task<VehicleResponse>> vehicleRetrivalTasksQuery = from id in vehicleIds select _apiService.GetVehicleByIdAsync(datasetId, id);
+            Task<VehicleResponse>[] vehicleRetrivalTasksArray = vehicleRetrivalTasksQuery.ToArray();
+            VehicleResponse[] vehicles = await Task.WhenAll(vehicleRetrivalTasksArray);
 
             //Grouping vehicles by dealer Id
             var vehiclesGroupedByDealers = vehicles.GroupBy(i => i.dealerId);
 
             //Retriving Dealers and preparing dealer DTOs for the answer 
-            IEnumerable<Task<DealerAnswer>> getDealerTasksQuery = from g in vehiclesGroupedByDealers select PrepareDealerDTOs(datasetId, g.Key, g.ToList());
-            Task<DealerAnswer>[] getDealerTasksArray = getDealerTasksQuery.ToArray();
-            DealerAnswer[] dealers = await Task.WhenAll(getDealerTasksArray);
+            IEnumerable<Task<DealerAnswer>> dealerRetrivalTasksQuery = from g in vehiclesGroupedByDealers select PrepareDealerDTOs(datasetId, g.Key, g.ToList());
+            Task<DealerAnswer>[] dealerRetrivalTasksArray = dealerRetrivalTasksQuery.ToArray();
+            DealerAnswer[] dealers = await Task.WhenAll(dealerRetrivalTasksArray);
 
             //Preparing the Answer DTO
             Answer answer = new Answer()
