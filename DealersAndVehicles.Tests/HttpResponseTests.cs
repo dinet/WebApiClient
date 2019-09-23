@@ -29,7 +29,6 @@ namespace DealersAndVehicles.Tests
         public void GetResponseIsJson()
         {
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
             Assert.AreEqual("application/json", response.Content.Headers.ContentType.MediaType);
         }
 
