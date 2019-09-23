@@ -14,7 +14,7 @@ namespace DealersAndVehicles.Services
             _apiService = apiService;
         }
 
-        public async Task<string> RetriveDataSetId()
+        public async Task<string> RetriveDataSetIdAsync()
         {
             return await _apiService.GetDatasetIdAsync();
         }
@@ -42,7 +42,7 @@ namespace DealersAndVehicles.Services
                 return new VehicleResponse[0];
         }
 
-        public List<DealerAnswer> GroupVehiclesBydealerId(VehicleResponse[] vehicles)
+        public List<DealerAnswer> GenerateDealerAnswerDTO(VehicleResponse[] vehicles)
         {
             List<DealerAnswer> dealers = new List<DealerAnswer>();
             if (vehicles.Count() > 0)

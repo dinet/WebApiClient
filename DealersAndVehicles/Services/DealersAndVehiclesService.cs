@@ -18,7 +18,7 @@ namespace DealersAndVehicles.Services
         public async Task<Tuple<string, Answer>> GenerateAnswer()
         {
             //Retrive the dataset Id
-            string datasetId = await _dataRetrievalService.RetriveDataSetId();
+            string datasetId = await _dataRetrievalService.RetriveDataSetIdAsync();
 
             //Retrive vehicle Ids list
             List<int> vehicleIds = await _dataRetrievalService.RetrieveVehicleIdsAsync(datasetId);
@@ -27,7 +27,7 @@ namespace DealersAndVehicles.Services
             VehicleResponse[] vehicles = await _dataRetrievalService.RetriveVehicleDetailsAsync(datasetId, vehicleIds);
 
             //Group vehicles by dealerIds
-            List<DealerAnswer> dealerAnswers = _dataRetrievalService.GroupVehiclesBydealerId(vehicles);
+            List<DealerAnswer> dealerAnswers = _dataRetrievalService.GenerateDealerAnswerDTO(vehicles);
 
             //Get distinct dealerIds list
             List<int> dealerIds = dealerAnswers.Select(i => i.dealerId).ToList();
