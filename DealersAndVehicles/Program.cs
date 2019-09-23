@@ -14,11 +14,12 @@ namespace DealersAndVehicles
                      .AddHttpClient()
                      .AddSingleton<IApiService, ApiService>()
                      .AddSingleton<IDealersAndVehiclesService, DealersAndVehiclesService>()
+                     .AddSingleton<IDataRetrievalService, DataRetrievalService>()
                      .BuildServiceProvider();
 
             IDealersAndVehiclesService dealersAndVehiclesService = serviceProvider.GetService<IDealersAndVehiclesService>();
             Task<Tuple<string, Answer>> answer = dealersAndVehiclesService.GenerateAnswer();
-            Task<string> response = dealersAndVehiclesService.PostAnswer(answer.Result.Item1, answer.Result.Item2);
+            Task<string> response = dealersAndVehiclesService.PostAnswerAsync(answer.Result.Item1, answer.Result.Item2);
 
             Console.WriteLine(response.Result);
             Console.ReadLine();
