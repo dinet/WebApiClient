@@ -1,4 +1,4 @@
-﻿using DealersAndVehicles.DTO;
+﻿using DealersAndVehicles.Models;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Collections.Generic;
@@ -8,50 +8,45 @@ namespace DealersAndVehicles.Services
     public class ApiService : IApiService
     {
         private readonly string _baseUrl;
-        private readonly IHttpClientFactory _clientFactory;
+        private readonly HttpClient _httpclient;
 
         public ApiService(IHttpClientFactory clientFactory)
         {
             _baseUrl = ConfigurationManager.AppSetting["baseUrl"];
-            _clientFactory = clientFactory;
+            _httpclient = clientFactory.CreateClient();
         }
 
         public async Task<string> GetDatasetIdAsync()
         {
-            var httpClient = _clientFactory.CreateClient();
-            var response = await httpClient.GetAsync($"{_baseUrl}/datasetId");
-            DatasetDTO dto = await response.Content.ReadAsAsync<DatasetDTO>();
+            var response = await _httpclient.GetAsync($"{_baseUrl}/datasetId");
+            DatasetResponse dto = await response.Content.ReadAsAsync<DatasetResponse>();
             return dto.datasetId;
         }
 
         public async Task<List<int>> GetVehiclesListAsync(string datasetId)
         {
-            var httpClient = _clientFactory.CreateClient();
-            var response = await httpClient.GetAsync($"{_baseUrl}/{datasetId}/vehicles");
-            VehicleIdsDTO vehicles = await response.Content.ReadAsAsync<VehicleIdsDTO>();
+            var response = await _httpclient.GetAsync($"{_baseUrl}/{datasetId}/vehicles");
+            VehicleIdsResponse vehicles = await response.Content.ReadAsAsync<VehicleIdsResponse>();
             return vehicles.vehicleIds;
         }
 
-        public async Task<VehicleDTO> GetVehicleByIdAsync(string datasetId, int vehicleId)
+        public async Task<VehicleResponse> GetVehicleByIdAsync(string datasetId, int vehicleId)
         {
-            var httpClient = _clientFactory.CreateClient();
-            var response = await httpClient.GetAsync($"{_baseUrl}/{datasetId}/vehicles/{vehicleId}");
-            VehicleDTO dto = await response.Content.ReadAsAsync<VehicleDTO>();
+            var response = await _httpclient.GetAsync($"{_baseUrl}/{datasetId}/vehicles/{vehicleId}");
+            VehicleResponse dto = await response.Content.ReadAsAsync<VehicleResponse>();
             return dto;
         }
 
-        public async Task<DealerDTO> GetDealerByIdAsync(string datasetId, int dealerId)
+        public async Task<DealerResponse> GetDealerByIdAsync(string datasetId, int dealerId)
         {
-            var httpClient = _clientFactory.CreateClient();
-            var response = await httpClient.GetAsync($"{_baseUrl}/{datasetId}/dealers/{dealerId}");
-            DealerDTO dto = await response.Content.ReadAsAsync<DealerDTO>();
+            var response = await _httpclient.GetAsync($"{_baseUrl}/{datasetId}/dealers/{dealerId}");
+            DealerResponse dto = await response.Content.ReadAsAsync<DealerResponse>();
             return dto;
         }
 
-        public async Task<string> PostAnswerAsync(string datasetId, AnswerDTO answer)
+        public async Task<string> PostAnswerAsync(string datasetId, Answer answer)
         {
-            var httpClient = _clientFactory.CreateClient();
-            var response = await httpClient.PostAsJsonAsync($"{_baseUrl}/{datasetId}/answer", answer);
+            var response = await _httpclient.PostAsJsonAsync($"{_baseUrl}/{datasetId}/answer", answer);
             string content = await response.Content.ReadAsStringAsync();
             return content;
         }

@@ -1,6 +1,6 @@
-﻿namespace DealersAndVehicles.DTO
+﻿namespace DealersAndVehicles.Models
 {
-    public class DealerDTO
+    public class DealerResponse
     {
         public int dealerId { get; set; }
         public string name { get; set; }

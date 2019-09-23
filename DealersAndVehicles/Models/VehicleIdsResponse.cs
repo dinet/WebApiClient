@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace DealersAndVehicles.DTO
+namespace DealersAndVehicles.Models
 {
-    public class VehicleIdsDTO
+    public class VehicleIdsResponse
     {
         public List<int> vehicleIds { get; set; }
     }

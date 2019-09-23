@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 
-namespace DealersAndVehicles.DTO
+namespace DealersAndVehicles.Models
 {
-    public class DealerAnswerDTO
+    public class DealerAnswer
     {
         public int dealerId { get; set; }
         public string name { get; set; }
-        public List<VehicleAnswerDTO> vehicles { get; set; }
+        public List<VehicleAnswer> vehicles { get; set; }
     }
 }
