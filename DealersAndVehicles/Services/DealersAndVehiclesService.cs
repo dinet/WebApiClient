@@ -26,7 +26,7 @@ namespace DealersAndVehicles.Services
             //Retrive vehicles for each vehicleId
             VehicleResponse[] vehicles = await _dataRetrievalService.RetriveVehicleDetailsAsync(datasetId, vehicleIds);
 
-            //Group vehicles by dealerIds
+            //Generate Dealer Answer DTO
             List<DealerAnswer> dealerAnswers = _dataRetrievalService.GenerateDealerAnswerDTO(vehicles);
 
             //Get distinct dealerIds list
