@@ -1,4 +1,5 @@
 ﻿using DealersAndVehicles.Models;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,21 +16,19 @@ namespace DealersAndVehicles.Services
             _apiService = apiService;
         }
 
+        //Retrives dataset ID
         public async Task<string> RetriveDataSetIdAsync()
         {
             return await _apiService.GetDatasetIdAsync();
         }
 
-        //public bool IsValidDatasetId(string datasetId)
-        //{
-
-        //}
-
+        //Retrives vehicles Ids by dataset id
         public async Task<List<int>> RetrieveVehicleIdsAsync(string datasetId)
         {
             return await _apiService.GetVehiclesListAsync(datasetId);
         }
 
+        //Retrives vehicle details by vehicles ids
         public async Task<VehicleResponse[]> RetriveVehicleDetailsAsync(string datasetId, List<int> vehicleIds)
         {
             if (vehicleIds.Count > 0)
@@ -43,6 +42,7 @@ namespace DealersAndVehicles.Services
                 return new VehicleResponse[0];
         }
 
+        //Generates dealer answer DTO
         public List<DealerAnswer> GenerateDealerAnswerDTO(VehicleResponse[] vehicles)
         {
             List<DealerAnswer> dealers = new List<DealerAnswer>();
@@ -63,6 +63,7 @@ namespace DealersAndVehicles.Services
             return dealers;
         }
 
+        //Retrives dealer details
         public async Task<List<DealerResponse>> RetriveDealerDetailsAsyc(string datasetId, List<int> dealerIds)
         {
             IEnumerable<Task<DealerResponse>> dealerRetrivalTasksQuery = from id in dealerIds select _apiService.GetDealerByIdAsync(datasetId, id);
@@ -71,6 +72,7 @@ namespace DealersAndVehicles.Services
             return dealers.ToList();
         }
 
+        //Posts answer
         public async Task<string> PostAnswerAsync(string datasetId, Answer answer)
         {
             return await _apiService.PostAnswerAsync(datasetId, answer);

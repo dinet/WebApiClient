@@ -3,6 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 using DealersAndVehicles.Services;
 using System;
 using DealersAndVehicles.Models;
+using Serilog;
+using Microsoft.Extensions.Logging;
 
 namespace DealersAndVehicles
 {
@@ -25,7 +27,7 @@ namespace DealersAndVehicles
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                Console.WriteLine(ex.Message);
             }
             Console.WriteLine("Press any key to exit");
             Console.ReadKey();
@@ -33,14 +35,17 @@ namespace DealersAndVehicles
 
         private static void ConfigureServices()
         {
+            Log.Logger = new LoggerConfiguration().WriteTo.File("consoleapp.log").CreateLogger();
             //Configuring services
             ServiceProvider serviceProvider = new ServiceCollection()
+                     .AddLogging(configure => configure.AddSerilog())
                      .AddHttpClient()
                      .AddSingleton<IApiService, ApiService>()
                      .AddSingleton<IDealersAndVehiclesService, DealersAndVehiclesService>()
                      .AddSingleton<IDataRetrievalService, DataRetrievalService>()
                      .BuildServiceProvider();
             dealersAndVehiclesService = serviceProvider.GetService<IDealersAndVehiclesService>();
+
         }
     }
 }
