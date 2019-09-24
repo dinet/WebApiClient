@@ -2,8 +2,12 @@
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NUnit.Framework;
+using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using DealersAndVehicles.Models;
+using System.Net.Http;
 
 namespace DealersAndVehicles.Tests
 {
@@ -30,21 +34,27 @@ namespace DealersAndVehicles.Tests
         }
 
         [Test]
+        public async Task RetrieveVehicleIdsAsync_ShouldThrowExceptionForIncorrectDatasetID()
+        {
+            Assert.ThrowsAsync<UnsupportedMediaTypeException>(async () => await _dataRetrievalService.RetrieveVehicleIdsAsync("abcdefghijk"));
+        }
+
+
+        [Test]
         public async Task RetrieveVehicleIdsAsync_ShouldReturnVehicleListForValidDataSetId()
         {
             var vehicles = await _dataRetrievalService.RetrieveVehicleIdsAsync(_dataSetId);
-            Assert.Greater(vehicles.Count, 0);
+            CollectionAssert.IsNotEmpty(vehicles);
         }
 
         [Test]
-        public async Task RetrieveVehicleIdsAsync_ShouldReturnEmptyForNullDatasetId()
+        public async Task RetrieveVehicleIdsAsync_ShouldReturnExceptionForNullDatasetId()
         {
-            var vehicles = await _dataRetrievalService.RetrieveVehicleIdsAsync(null);
-            Assert.AreEqual(vehicles.Count, 0);
+            Assert.ThrowsAsync<NullReferenceException>(async () => await _dataRetrievalService.RetrieveVehicleIdsAsync(null));
         }
 
         [Test]
-        public async Task RetriveVehicleDetailsAsync_ShouldReturnListForVechileIds()
+        public async Task RetriveVehicleDetailsAsync_ShouldReturnCorrectListForVehicles()
         {
             List<int> vehicleIds = new List<int>
             {
@@ -54,15 +64,15 @@ namespace DealersAndVehicles.Tests
             };
 
             var vehicles = await _dataRetrievalService.RetriveVehicleDetailsAsync(_dataSetId, vehicleIds);
-            Assert.Greater(vehicles.Length, 0);
+            CollectionAssert.AreEquivalent(vehicleIds, vehicles.Select(i => i.vehicleId).ToList());
         }
 
         [Test]
         public async Task RetriveVehicleDetailsAsync_ShouldReturnEmptyForEmptyVehicleIds()
         {
             List<int> vehicleIds = new List<int>();
-            var vehicles = await _dataRetrievalService.RetriveVehicleDetailsAsync(_dataSetId, vehicleIds);
-            Assert.AreEqual(vehicles.Length, 0);
+            VehicleResponse[] vehicles = await _dataRetrievalService.RetriveVehicleDetailsAsync(_dataSetId, vehicleIds);
+            CollectionAssert.IsEmpty(vehicles);
         }
 
         [Test]
@@ -74,8 +84,7 @@ namespace DealersAndVehicles.Tests
                 346042914
             };
             var dealers = await _dataRetrievalService.RetriveDealerDetailsAsyc(_dataSetId, dealerIds);
-            Assert.Greater(dealers.Count, 0);
+            CollectionAssert.IsNotEmpty(dealers);
         }
-
     }
 }

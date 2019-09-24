@@ -1,4 +1,5 @@
 ﻿using DealersAndVehicles.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,14 +20,14 @@ namespace DealersAndVehicles.Services
             return await _apiService.GetDatasetIdAsync();
         }
 
+        //public bool IsValidDatasetId(string datasetId)
+        //{
+
+        //}
+
         public async Task<List<int>> RetrieveVehicleIdsAsync(string datasetId)
         {
-            List<int> vehicleIds = new List<int>();
-            if (!string.IsNullOrEmpty(datasetId))
-            {
-                vehicleIds = await _apiService.GetVehiclesListAsync(datasetId);
-            }
-            return vehicleIds;
+            return await _apiService.GetVehiclesListAsync(datasetId);
         }
 
         public async Task<VehicleResponse[]> RetriveVehicleDetailsAsync(string datasetId, List<int> vehicleIds)
