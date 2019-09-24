@@ -17,41 +17,34 @@ namespace DealersAndVehicles.Services
 
         public async Task<DatasetAnswer> GenerateAnswerAsync()
         {
-            try
+            //Retrive the dataset Id
+            string datasetId = await _dataRetrievalService.RetriveDataSetIdAsync();
+
+            //Retrive vehicle Ids list
+            List<int> vehicleIds = await _dataRetrievalService.RetrieveVehicleIdsAsync(datasetId);
+
+            //Retrive vehicles for each vehicleId
+            VehicleResponse[] vehicles = await _dataRetrievalService.RetriveVehicleDetailsAsync(datasetId, vehicleIds);
+
+            //Generate Dealer Answer DTO
+            List<DealerAnswer> dealerAnswers = _dataRetrievalService.GenerateDealerAnswerDTO(vehicles);
+
+            //Get distinct dealerIds list
+            List<int> dealerIds = dealerAnswers.Select(i => i.dealerId).ToList();
+
+            //Retrive dealers by dealerId
+            List<DealerResponse> dealerReponses = await _dataRetrievalService.RetriveDealerDetailsAsyc(datasetId, dealerIds);
+
+            //Setting dealer names in dealer answer
+            dealerAnswers.ForEach(i => i.name = dealerReponses.FirstOrDefault(d => d.dealerId == i.dealerId)?.name);
+
+            //Preparing the Answer
+            Answer answer = new Answer()
             {
-                //Retrive the dataset Id
-                string datasetId = await _dataRetrievalService.RetriveDataSetIdAsync();
+                dealers = dealerAnswers.ToList()
+            };
 
-                //Retrive vehicle Ids list
-                List<int> vehicleIds = await _dataRetrievalService.RetrieveVehicleIdsAsync(datasetId);
-
-                //Retrive vehicles for each vehicleId
-                VehicleResponse[] vehicles = await _dataRetrievalService.RetriveVehicleDetailsAsync(datasetId, vehicleIds);
-
-                //Generate Dealer Answer DTO
-                List<DealerAnswer> dealerAnswers = _dataRetrievalService.GenerateDealerAnswerDTO(vehicles);
-
-                //Get distinct dealerIds list
-                List<int> dealerIds = dealerAnswers.Select(i => i.dealerId).ToList();
-
-                //Retrive dealers by dealerId
-                List<DealerResponse> dealerReponses = await _dataRetrievalService.RetriveDealerDetailsAsyc(datasetId, dealerIds);
-
-                //Setting dealer names in dealer answer
-                dealerAnswers.ForEach(i => i.name = dealerReponses.FirstOrDefault(d => d.dealerId == i.dealerId)?.name);
-
-                //Preparing the Answer
-                Answer answer = new Answer()
-                {
-                    dealers = dealerAnswers.ToList()
-                };
-
-                return new DatasetAnswer() { DataSetId = datasetId, Answer = answer };
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
+            return new DatasetAnswer() { DataSetId = datasetId, Answer = answer };
         }
 
         public async Task<string> PostAnswerAsync(string datasetId, Answer answer)

@@ -12,6 +12,7 @@ namespace DealersAndVehicles
         static void Main(string[] args)
         {
             ConfigureServices();
+
             try
             {
                 //Generating Answer
@@ -22,9 +23,9 @@ namespace DealersAndVehicles
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                Console.WriteLine(ex.StackTrace);
+                Console.WriteLine(ex);
             }
+           
             Console.ReadLine();
         }
 
