@@ -12,13 +12,19 @@ namespace DealersAndVehicles
         static void Main(string[] args)
         {
             ConfigureServices();
-
-            //Generating Answer
-            Task<DatasetAnswer> answer = dealersAndVehiclesService.GenerateAnswerAsync();
-            //Posting Answer
-            Task<string> response = dealersAndVehiclesService.PostAnswerAsync(answer.Result.DataSetId, answer.Result.Answer);
-
-            Console.WriteLine(response.Result);
+            try
+            {
+                //Generating Answer
+                Task<DatasetAnswer> answer = dealersAndVehiclesService.GenerateAnswerAsync();
+                //Posting Answer
+                Task<string> response = dealersAndVehiclesService.PostAnswerAsync(answer.Result.DataSetId, answer.Result.Answer);
+                Console.WriteLine(response.Result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.StackTrace);
+            }
             Console.ReadLine();
         }
 
