@@ -7,7 +7,7 @@ namespace DealersAndVehicles.Tests
         [Test]
         public void TestHelloNunit()
         {
-            Assert.That(true, Is.False);
+            Assert.Pass();
         }
     }
 }

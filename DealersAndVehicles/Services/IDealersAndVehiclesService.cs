@@ -6,7 +6,7 @@ namespace DealersAndVehicles.Services
 {
     public interface IDealersAndVehiclesService
     {
-        Task<Tuple<string, Answer>> GenerateAnswer();
+        Task<DatasetAnswer> GenerateAnswerAsync();
         Task<string> PostAnswerAsync(string datasetId, Answer answer);
     }
 }

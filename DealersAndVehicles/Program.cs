@@ -18,8 +18,8 @@ namespace DealersAndVehicles
                      .BuildServiceProvider();
 
             IDealersAndVehiclesService dealersAndVehiclesService = serviceProvider.GetService<IDealersAndVehiclesService>();
-            Task<Tuple<string, Answer>> answer = dealersAndVehiclesService.GenerateAnswer();
-            Task<string> response = dealersAndVehiclesService.PostAnswerAsync(answer.Result.Item1, answer.Result.Item2);
+            Task<DatasetAnswer> answer = dealersAndVehiclesService.GenerateAnswerAsync();
+            Task<string> response = dealersAndVehiclesService.PostAnswerAsync(answer.Result.DataSetId, answer.Result.Answer);
 
             Console.WriteLine(response.Result);
             Console.ReadLine();

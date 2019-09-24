@@ -44,13 +44,6 @@ namespace DealersAndVehicles.Tests
         }
 
         [Test]
-        public async Task RetrieveVehicleIdsAsync_ShouldReturnEmptyForIncorrectDatasetId()
-        {
-            var vehicles = await _dataRetrievalService.RetrieveVehicleIdsAsync("qeqwrqwerqw");
-            Assert.AreEqual(vehicles.Count, 0);
-        }
-
-        [Test]
         public async Task RetriveVehicleDetailsAsync_ShouldReturnListForVechileIds()
         {
             List<int> vehicleIds = new List<int>

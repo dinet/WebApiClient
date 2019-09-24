@@ -15,7 +15,7 @@ namespace DealersAndVehicles.Services
             _dataRetrievalService = dataRetrievalService;
         }
 
-        public async Task<Tuple<string, Answer>> GenerateAnswer()
+        public async Task<DatasetAnswer> GenerateAnswerAsync()
         {
             //Retrive the dataset Id
             string datasetId = await _dataRetrievalService.RetriveDataSetIdAsync();
@@ -44,7 +44,7 @@ namespace DealersAndVehicles.Services
                 dealers = dealerAnswers.ToList()
             };
 
-            return new Tuple<string, Answer>(datasetId, answer);
+            return new DatasetAnswer() { DataSetId = datasetId, Answer = answer };
         }
 
         public async Task<string> PostAnswerAsync(string datasetId, Answer answer)
