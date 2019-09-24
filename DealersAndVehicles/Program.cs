@@ -15,18 +15,20 @@ namespace DealersAndVehicles
 
             try
             {
+                Console.WriteLine("Processing...");
                 //Generating Answer
                 Task<DatasetAnswer> answer = dealersAndVehiclesService.GenerateAnswerAsync();
                 //Posting Answer
                 Task<string> response = dealersAndVehiclesService.PostAnswerAsync(answer.Result.DataSetId, answer.Result.Answer);
-                Console.WriteLine(response.Result);
+                Console.Clear();
+                Console.WriteLine($"Program finished with the following message\n\n{ response.Result}\n");
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
             }
-           
-            Console.ReadLine();
+            Console.WriteLine("Press any key to exit");
+            Console.ReadKey();
         }
 
         private static void ConfigureServices()
